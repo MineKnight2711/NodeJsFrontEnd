@@ -37,7 +37,7 @@ class DishByCategoryState extends State<DishByCategory> {
 
   Future<void> loadDishes() async {
     List<DishModel>? dishes =
-        await categoryController.loadDishByCategory(widget.category.id ?? 0);
+        await categoryController.loadDishByCategory(widget.category.id ?? "");
     setState(() {
       _dishes = dishes ?? [];
       _filteredDishes = dishes ?? [];

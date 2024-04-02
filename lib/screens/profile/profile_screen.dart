@@ -9,7 +9,7 @@ import 'package:quanlyquantrasua/model/account_response.dart';
 import 'package:quanlyquantrasua/model/account_update_model.dart';
 import 'package:quanlyquantrasua/screens/home/home_screens.dart';
 import 'package:quanlyquantrasua/test/select_image_constant/image_select.dart';
-import 'package:quanlyquantrasua/utils/save_image.dart';
+
 import 'package:quanlyquantrasua/widgets/custom_widgets/custom_appbar.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/custom_input_textformfield.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/datetime_picker.dart';
@@ -116,9 +116,9 @@ class EditProfileScreen extends StatelessWidget {
                   accountUpdate.address =
                       profileController.addressController.text;
                   if (profileController.image != null) {
-                    accountUpdate.imageUrl = await saveImage(
-                        profileController.image,
-                        "${accountController.accountRespone.value?.email}_${accountController.accountRespone.value?.phoneNumber}");
+                    // accountUpdate.imageUrl = await saveImage(
+                    //     profileController.image,
+                    //     "${accountController.accountRespone.value?.email}_${accountController.accountRespone.value?.phoneNumber}");
                   } else {
                     accountUpdate.imageUrl =
                         accountController.accountRespone.value?.imageUrl;

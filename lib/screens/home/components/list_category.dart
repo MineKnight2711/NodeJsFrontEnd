@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quanlyquantrasua/api/category/api_category.dart';
+import 'package:quanlyquantrasua/controller/category_controller.dart';
 import 'package:quanlyquantrasua/screens/home/dish_category/list_dish_by_category.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/transition.dart';
 
 class MenuCategoryList extends StatelessWidget {
   MenuCategoryList({Key? key}) : super(key: key);
 
-  final controller = Get.find<CategoryApi>();
+  final controller = Get.find<CategoryController>();
   @override
   Widget build(BuildContext context) {
     controller.getAllCategory();
@@ -20,12 +20,12 @@ class MenuCategoryList extends StatelessWidget {
           height: 80.0,
           child: Obx(
             () {
-              if (controller.listCategory.value != null) {
+              if (controller.listCategory.isNotEmpty) {
                 return ListView.builder(
-                    itemCount: controller.listCategory.value!.length,
+                    itemCount: controller.listCategory.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      var item = controller.listCategory.value![index];
+                      var item = controller.listCategory[index];
                       return GestureDetector(
                         onTap: () {
                           slideinTransition(
@@ -40,8 +40,8 @@ class MenuCategoryList extends StatelessWidget {
                               CircleAvatar(
                                 radius: 25,
                                 backgroundColor: Colors.white,
-                                child: item.image != null
-                                    ? Image.network("${item.image}")
+                                child: item.imageUrl != null
+                                    ? Image.network("${item.imageUrl}")
                                     : Image.asset(
                                         "assets/images/milktea.png",
                                         width: 42.0,

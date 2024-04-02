@@ -5,7 +5,6 @@ import 'package:quanlyquantrasua/configs/mediaquery.dart';
 import 'package:quanlyquantrasua/controller/register_controller.dart';
 import 'package:quanlyquantrasua/model/account_model.dart';
 import 'package:quanlyquantrasua/screens/sign_in/sign_in_screen.dart';
-import 'package:quanlyquantrasua/utils/save_image.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/gender_chose.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/messages_widget.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/showLoading.dart';
@@ -91,14 +90,14 @@ class SignUpCompleteForm extends StatelessWidget {
                         backgroundColor: Colors.red);
                     return;
                   }
-                  if (registerController.image == null) {
-                    accounts.imageUrl = await uploadDefaultImage(
-                        '${accounts.email}_${accounts.phoneNumber}');
-                  } else {
-                    accounts.imageUrl = await saveImage(
-                        registerController.image,
-                        '${accounts.email}_${accounts.phoneNumber}');
-                  }
+                  // if (registerController.image == null) {
+                  //   accounts.imageUrl = await uploadDefaultImage(
+                  //       '${accounts.email}_${accounts.phoneNumber}');
+                  // } else {
+                  //   accounts.imageUrl = await saveImage(
+                  //       registerController.image,
+                  //       '${accounts.email}_${accounts.phoneNumber}');
+                  // }
                   accounts.username =
                       registerController.fullnameController.text;
                   accounts.accounttypeid = 2;

@@ -1,5 +1,5 @@
 class ApiUrl {
-  static const baseUrl = 'http://26.196.143.193:7071/api/';
+  static const baseUrl = 'http://26.196.143.193:3000/api/v1/';
 
   static const apiGetAllAccount = '${baseUrl}accounts/all';
 
@@ -10,7 +10,7 @@ class ApiUrl {
   static const apiGetDishesByCategory = '${baseUrl}dish/getByCategory';
   // static const apiCreateCategory = '${baseUrl}user/id/';
   ///// Api của Tính
-  static const apiGetAllCategory = '${baseUrl}categories';
+  static const apiGetAllCategory = '${baseUrl}category';
   static const apiGetAllSize = '${baseUrl}size';
   static const apiGetAllProduct = '${baseUrl}dish';
 
