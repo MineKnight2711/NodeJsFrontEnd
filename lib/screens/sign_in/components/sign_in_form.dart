@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quanlyquantrasua/api/account/account_api.dart';
+import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/change_password_controller.dart';
+import 'package:quanlyquantrasua/controller/login_controller.dart';
 import 'package:quanlyquantrasua/model/account_model.dart';
 
 import 'package:quanlyquantrasua/screens/home/home_screens.dart';
@@ -26,7 +28,8 @@ class _SignInFormState extends State<SignInForm> {
   late TextEditingController passwordController;
   bool isValidEmail = false;
   bool isValidPassword = false;
-  final controller = Get.find<AccountApi>();
+  final controller = Get.find<AccountController>();
+  final _auth = Get.find<LoginController>();
   // late AuthController authController;
 
   // late GetCartUserController cartController;
@@ -114,21 +117,34 @@ class _SignInFormState extends State<SignInForm> {
           text: 'Đăng nhập',
           press: () async {
             showLoadingAnimation(context);
-            Accounts accounts = Accounts();
-            accounts.email = emailController.text;
-            accounts.password = passwordController.text;
 
-            await controller.login(accounts.loginToJson()).then((value) {
-              if (value.status == 'Success') {
-                CustomSnackBar.showCustomSnackBar(
-                    context, 'Đăng nhập thành công!', 2);
-                slideinTransitionNoBack(context, HomeScreenView());
-              } else {
-                CustomSnackBar.showCustomSnackBar(
-                    context, 'Đăng nhập thất bại! \nLỗi: ${value.status}', 1,
-                    backgroundColor: Colors.red);
-              }
-            });
+            final result = await _auth.login(
+                emailController.text, passwordController.text);
+            if (result) {
+              CustomSnackBar.showCustomSnackBar(
+                  context, 'Đăng nhập thành công!', 2);
+              slideinTransitionNoBack(context, HomeScreenView());
+            } else {
+              CustomSnackBar.showCustomSnackBar(
+                  context, 'Đăng nhập thất bại!', 1,
+                  backgroundColor: Colors.red);
+            }
+
+            // Accounts accounts = Accounts();
+            // accounts.email = emailController.text;
+            // accounts.password = passwordController.text;
+
+            // await controller.login(accounts.loginToJson()).then((value) {
+            //   if (value.status == 'Success') {
+            //     CustomSnackBar.showCustomSnackBar(
+            //         context, 'Đăng nhập thành công!', 2);
+            //     slideinTransitionNoBack(context, HomeScreenView());
+            //   } else {
+            //     CustomSnackBar.showCustomSnackBar(
+            //         context, 'Đăng nhập thất bại! \nLỗi: ${value.status}', 1,
+            //         backgroundColor: Colors.red);
+            //   }
+            // });
           },
         )
       ]),

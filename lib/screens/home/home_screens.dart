@@ -1,13 +1,10 @@
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
-import 'package:quanlyquantrasua/api/account/account_api.dart';
 import 'package:quanlyquantrasua/api/topping/api_topping.dart';
-import 'package:quanlyquantrasua/api/product/api_product.dart';
-import 'package:quanlyquantrasua/api/size/api_size.dart';
+import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/cart_controller.dart';
 
-import '../../api/category/api_category.dart';
 import 'components/home_appbar.dart';
 import 'components/listproduct_container.dart';
 
@@ -16,21 +13,12 @@ class HomeScreenView extends StatelessWidget {
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final accountController = Get.put(AccountApi());
-
-  final categoryController = Get.put(CategoryApi());
-
-  final dishController = Get.put(DishApi());
-
-  final sizeController = Get.put(SizeApi());
+  final accountController = Get.find<AccountController>();
 
   final toppingController = Get.put(ToppingApi());
 
   final cartController = Get.put(CartController());
   Future<void> _refesh() async {
-    await categoryController.getAllCategory();
-    await dishController.getAllDish();
-    await sizeController.getAllSize();
     await toppingController.getAllTopping();
   }
 

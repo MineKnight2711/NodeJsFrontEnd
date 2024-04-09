@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quanlyquantrasua/api/product/api_product.dart';
 import 'package:quanlyquantrasua/configs/mediaquery.dart';
+import 'package:quanlyquantrasua/controller/drink_controller.dart';
 import '../../../utils/format_currency.dart';
 import '../../product-detail/product_bottom_sheet/details_bottom_sheet.dart';
 import '../banner/banner_list.dart';
@@ -70,15 +70,13 @@ class GroceryContainer extends StatelessWidget {
 class ListDishView extends StatelessWidget {
   ListDishView({Key? key}) : super(key: key);
 
-  final controller = Get.find<DishApi>();
+  final controller = Get.find<DrinkController>();
 
   @override
   Widget build(BuildContext context) {
-    controller.getAllDish();
-
     return Obx(() {
-      if (controller.listDish.value != null) {
-        int numberOfItems = controller.listDish.value!.length;
+      if (controller.listDrink.isNotEmpty) {
+        int numberOfItems = controller.listDrink.length;
         double itemHeight = mediaHeight(context, 8);
 
         int mainAxisCount = 15;
@@ -94,9 +92,9 @@ class ListDishView extends StatelessWidget {
             staggeredTileBuilder: (index) => const StaggeredTile.fit(1),
             mainAxisSpacing: 15,
             crossAxisSpacing: 8.0,
-            itemCount: controller.listDish.value!.length,
+            itemCount: controller.listDrink.length,
             itemBuilder: (BuildContext context, int index) {
-              var item = controller.listDish.value![index];
+              var item = controller.listDrink[index];
               return InkWell(
                 onTap: () {
                   showModalBottomSheet(
@@ -111,7 +109,7 @@ class ListDishView extends StatelessWidget {
                     backgroundColor: Colors.white,
                     builder: (BuildContext context) {
                       return OrderDetailsBottomSheet(
-                        dish: item,
+                        drink: item,
                       );
                     },
                   );
@@ -132,7 +130,7 @@ class ListDishView extends StatelessWidget {
                         child: AspectRatio(
                           aspectRatio: 160.06 / 190.42,
                           child: Image.network(
-                            "${item.image}",
+                            item.imageUrl,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -143,7 +141,7 @@ class ListDishView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "${item.dishName}",
+                              item.drinkName,
                               style: GoogleFonts.nunito(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -152,7 +150,7 @@ class ListDishView extends StatelessWidget {
                             ),
                             const SizedBox(height: 4.0),
                             Text(
-                              "${item.categories?.categoryName}",
+                              "${item.category.categoryName}",
                               style: GoogleFonts.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
@@ -163,7 +161,7 @@ class ListDishView extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  formatCurrency(item.price ?? 0),
+                                  formatCurrency(item.price),
                                   style: GoogleFonts.poppins(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,

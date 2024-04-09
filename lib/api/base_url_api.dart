@@ -12,10 +12,10 @@ class ApiUrl {
   ///// Api của Tính
   static const apiGetAllCategory = '${baseUrl}category';
   static const apiGetAllSize = '${baseUrl}size';
-  static const apiGetAllProduct = '${baseUrl}dish';
+  static const apiGetAllProduct = '${baseUrl}drink';
 
   //// Api của Quý
-  static const apiLogin = '${baseUrl}accounts/login';
+  static const apiLogin = '${baseUrl}auth/login';
   static const apiGetAllToppings = '${baseUrl}topping';
   static const apiCreateOrder = '${baseUrl}orders';
   static const apiUpdateAccount = '${baseUrl}accounts/update';

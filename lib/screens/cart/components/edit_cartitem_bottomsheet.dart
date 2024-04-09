@@ -46,7 +46,7 @@ class _EditCartItemBottomSheetState extends State<EditCartItemBottomSheet> {
               height: 50,
               child: Center(
                 child: Text(
-                  '${widget.cartItem.dish.dishName}',
+                  widget.cartItem.drink.drinkName,
                   style: GoogleFonts.nunito(fontSize: 18),
                 ),
               ),
@@ -75,8 +75,8 @@ class _EditCartItemBottomSheetState extends State<EditCartItemBottomSheet> {
             ),
           ),
           SizeRadioChosen(
-            item: widget.cartItem.size,
-            onSizeSelected: (value) {
+            selected: selectedSize,
+            onSelectedSize: (value) {
               selectedSize = value;
             },
           ),

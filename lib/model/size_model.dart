@@ -1,19 +1,19 @@
 // ignore_for_file: non_constant_identifier_names
 
 class SizeModel {
-  int? sizeID;
-  String? sizeName;
-  double? price;
+  String sizeID;
+  String sizeName;
+  double price;
   SizeModel({
-    this.sizeID,
-    this.sizeName,
-    this.price,
+    required this.sizeID,
+    required this.sizeName,
+    required this.price,
   });
   factory SizeModel.fromJson(Map<String, dynamic> json) {
     return SizeModel(
-      sizeID: json['sizeID'],
+      sizeID: json['_id'],
       sizeName: json['sizeName'],
-      price: json['price'],
+      price: json['price'].toDouble(),
     );
   }
 

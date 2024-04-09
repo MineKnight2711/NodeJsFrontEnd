@@ -5,11 +5,13 @@ import 'package:quanlyquantrasua/api/topping/api_topping.dart';
 import '../../../model/topping_model.dart';
 
 class ToppingChoiceWidget extends StatefulWidget {
+  final List<ToppingModel> listTopping;
   final void Function(List<ToppingModel>) onToppingsSelected;
 
   const ToppingChoiceWidget({
     super.key,
     required this.onToppingsSelected,
+    required this.listTopping,
   });
 
   @override
@@ -18,7 +20,7 @@ class ToppingChoiceWidget extends StatefulWidget {
 
 class ToppingChoiceWidgetState extends State<ToppingChoiceWidget> {
   List<ToppingModel> chosenToppings = [];
-  final toppingController = Get.find<ToppingApi>();
+
   @override
   void initState() {
     super.initState();
@@ -34,12 +36,12 @@ class ToppingChoiceWidgetState extends State<ToppingChoiceWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 8.0),
-          if (toppingController.listTopping != null) ...[
+          if (widget.listTopping.isNotEmpty) ...[
             Expanded(
               child: ListView.builder(
-                itemCount: toppingController.listTopping!.length,
+                itemCount: widget.listTopping.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final topping = toppingController.listTopping![index];
+                  final topping = widget.listTopping[index];
                   return CheckboxListTile(
                     value: topping.selected,
                     onChanged: (value) {
@@ -64,15 +66,15 @@ class ToppingChoiceWidgetState extends State<ToppingChoiceWidget> {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            topping.image != null
+                            topping.imageUrl != null
                                 ? Image.network(
-                                    "${topping.image}",
+                                    "${topping.imageUrl}",
                                     width: 30,
                                   )
                                 : const Icon(Icons.category),
                             const SizedBox(width: 8),
                             Text(
-                              '\$${topping.price?.toStringAsFixed(2)} / ${topping.unit}',
+                              '\$${topping.price?.toStringAsFixed(2)}',
                               style: const TextStyle(fontSize: 14),
                             ),
                           ],

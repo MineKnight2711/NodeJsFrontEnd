@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:quanlyquantrasua/api/base_url_api.dart';
-import 'package:quanlyquantrasua/model/dish_model.dart';
+import 'package:quanlyquantrasua/model/drink_model.dart';
 import 'package:quanlyquantrasua/model/response_model.dart';
 
 class CategoryApi {
@@ -15,18 +15,5 @@ class CategoryApi {
           jsonDecode(utf8.decode(response.bodyBytes)));
     }
     return ResponseModel(success: false, data: null);
-  }
-
-  Future<List<DishModel>?> loadDishByCategory(String categoryId) async {
-    final response = await http
-        .get(Uri.parse('${ApiUrl.apiGetDishesByCategory}/$categoryId'));
-    if (response.statusCode == 200) {
-      List<dynamic> dishesJson = json.decode(utf8.decode(response.bodyBytes));
-      List<DishModel> dishes =
-          dishesJson.map((dishJson) => DishModel.fromJson(dishJson)).toList();
-      return dishes;
-    } else {
-      return null;
-    }
   }
 }

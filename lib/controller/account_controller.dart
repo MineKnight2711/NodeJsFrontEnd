@@ -1,12 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:get/get.dart';
 import 'package:quanlyquantrasua/model/account_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-AccountResponse? currentLogin;
+class AccountController extends GetxController {
+  Rx<AccountResponse?> accountRespone = Rx<AccountResponse?>(null);
+  @override
+  void onInit() {
+    super.onInit();
+    fetchCurrent();
+  }
 
-class AccountController {
+  Future fetchCurrent() async {
+    accountRespone.value =
+        await AccountController().getUserFromSharedPreferences();
+  }
+
   Future<void> storedUserToSharedRefererces(
       AccountResponse accountResponse) async {
     final prefs = await SharedPreferences.getInstance();

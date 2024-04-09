@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quanlyquantrasua/controller/category_controller.dart';
-import 'package:quanlyquantrasua/screens/home/dish_category/list_dish_by_category.dart';
-import 'package:quanlyquantrasua/widgets/custom_widgets/transition.dart';
 
 class MenuCategoryList extends StatelessWidget {
   MenuCategoryList({Key? key}) : super(key: key);
@@ -28,8 +26,8 @@ class MenuCategoryList extends StatelessWidget {
                       var item = controller.listCategory[index];
                       return GestureDetector(
                         onTap: () {
-                          slideinTransition(
-                              context, DishByCategory(category: item));
+                          // slideinTransition(
+                          //     context, DishByCategory(category: item));
                         },
                         child: Container(
                           margin: const EdgeInsets.only(

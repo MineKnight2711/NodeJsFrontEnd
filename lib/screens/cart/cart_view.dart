@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
-import 'package:quanlyquantrasua/api/account/account_api.dart';
 import 'package:quanlyquantrasua/configs/mediaquery.dart';
+import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/screens/cart/components/edit_cartitem_bottomsheet.dart';
 import 'package:quanlyquantrasua/screens/cart/components/edit_cartitem_button.dart';
 import 'package:quanlyquantrasua/utils/format_currency.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/custom_appbar.dart';
-import 'package:quanlyquantrasua/widgets/custom_widgets/messages_widget.dart';
 import '../../controller/cart_controller.dart';
-import '../../controller/order_controller.dart';
 import '../../widgets/custom_widgets/default_button.dart';
-import '../../widgets/custom_widgets/showLoading.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({
@@ -24,8 +20,8 @@ class CartScreen extends StatefulWidget {
 
 class CartScreenState extends State<CartScreen> {
   final cartController = Get.find<CartController>();
-  final orderController = Get.put(CreateOrderController());
-  final userController = Get.find<AccountApi>();
+
+  final userController = Get.find<AccountController>();
 
   @override
   void initState() {
@@ -138,7 +134,7 @@ class CartScreenState extends State<CartScreen> {
                                     height: size.height / 10,
                                     width: size.width / 5.5,
                                     child: Image.network(
-                                      "${item.dish.image}",
+                                      "${item.drink.imageUrl}",
                                       fit: BoxFit.fill,
                                     ),
                                   ),
@@ -152,7 +148,7 @@ class CartScreenState extends State<CartScreen> {
                             children: [
                               TextSpan(
                                 text:
-                                    "${item.quantity}x ${item.dish.dishName} - ",
+                                    "${item.quantity}x ${item.drink.drinkName} - ",
                                 style: const TextStyle(color: Colors.black),
                               ),
                               TextSpan(
@@ -162,7 +158,7 @@ class CartScreenState extends State<CartScreen> {
                             ],
                           ),
                         ),
-                        subtitle: Text("${item.dish.categories?.categoryName}"),
+                        subtitle: Text("${item.drink.category.categoryName}"),
                         trailing: Column(
                           children: [
                             EditCartItemButton(
@@ -237,24 +233,24 @@ class CartScreenState extends State<CartScreen> {
       bottomNavigationBar: Obx(
         () => CartBottomNavigation(
             onPaymentPressed: () async {
-              if (cartController.checkedItem.isEmpty) {
-                CustomErrorMessage.showMessage(
-                    'Bạn phải chọn ít nhất 1 sản phẩm để đặt hàng');
-                return;
-              }
-              showLoadingAnimation(context);
-              Logger().i(
-                  '${userController.accountRespone.value?.accountId ?? 0} +  loggg user');
-              Logger()
-                  .i('${cartController.checkedItem.length} + log cart choose');
-              orderController.createOrder(
-                  userController.accountRespone.value?.accountId ?? 0,
-                  cartController.checkedItem);
-              cartController.removeCheckedItemsFromCart();
-              Future.delayed(const Duration(seconds: 2), () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              });
+              // if (cartController.checkedItem.isEmpty) {
+              //   CustomErrorMessage.showMessage(
+              //       'Bạn phải chọn ít nhất 1 sản phẩm để đặt hàng');
+              //   return;
+              // }
+              // showLoadingAnimation(context);
+              // Logger().i(
+              //     '${userController.accountRespone.value?.accountId ?? 0} +  loggg user');
+              // Logger()
+              //     .i('${cartController.checkedItem.length} + log cart choose');
+              // orderController.createOrder(
+              //     userController.accountRespone.value?.accountId ?? 0,
+              //     cartController.checkedItem);
+              // cartController.removeCheckedItemsFromCart();
+              // Future.delayed(const Duration(seconds: 2), () {
+              //   Navigator.pop(context);
+              //   Navigator.pop(context);
+              // });
             },
             totalPrice: cartController.totalPrice.value),
       ),

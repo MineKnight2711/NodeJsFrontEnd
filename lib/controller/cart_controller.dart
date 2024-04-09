@@ -13,7 +13,7 @@ class CartController extends GetxController {
     //Kiểm tra đối tượng Cartitem giống phương thức bên dưới
     final existingIndex = cartItem.indexWhere(
       (element) =>
-          element.dish == item.dish &&
+          element.drink == item.drink &&
           element.size == item.size &&
           listEquals(element.toppings, item.toppings),
     );
@@ -56,7 +56,7 @@ class CartController extends GetxController {
   int queryChekedItemList(CartItem item) {
     return checkedItem.indexWhere(
       (element) =>
-          element.dish == item.dish &&
+          element.drink == item.drink &&
           element.size == item.size &&
           listEquals(element.toppings, item.toppings),
     );
@@ -74,7 +74,7 @@ class CartController extends GetxController {
   }
 
   double calculateItemTotal(CartItem item) {
-    final dishPrice = item.dish.price ?? 0.0;
+    final dishPrice = item.drink.price ?? 0.0;
     final sizePrice = item.size.price ?? 0.0;
     final toppingPrice = item.toppings.fold(0.0,
         (previousValue, topping) => previousValue += (topping.price ?? 0.0));
@@ -85,14 +85,14 @@ class CartController extends GetxController {
   //Phương thức tính tổng sản phẩm đã chọn
   void updateTotalPrice() {
     totalPrice.value = checkedItem.fold(0.0, (previousValue, item) {
-      final dishPrice = item.dish.price ?? 0.0;
+      final dishPrice = item.drink.price;
       final sizePrice = item.size.price ?? 0.0;
       final toppingPrice = item.toppings.fold(0.0,
           (previousValue, topping) => previousValue += (topping.price ?? 0.0));
       final itemPrice = (dishPrice + toppingPrice + sizePrice) * item.quantity;
       return previousValue + itemPrice;
     });
-  } 
+  }
 
   void updateCartItem(CartItem oldItem, CartItem newItem) {
     final index = cartItem.indexOf(oldItem);
@@ -109,7 +109,7 @@ class CartController extends GetxController {
   void removeCheckedItemsFromCart() {
     for (CartItem item in checkedItem) {
       cartItem.removeWhere((cartItem) =>
-          cartItem.dish == item.dish &&
+          cartItem.drink == item.drink &&
           cartItem.size == item.size &&
           listEquals(cartItem.toppings, item.toppings));
     }

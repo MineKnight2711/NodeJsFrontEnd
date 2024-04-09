@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quanlyquantrasua/configs/mediaquery.dart';
+import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/register_controller.dart';
 import 'package:quanlyquantrasua/model/account_model.dart';
 import 'package:quanlyquantrasua/screens/sign_in/sign_in_screen.dart';
@@ -17,7 +18,7 @@ import '../../../widgets/custom_widgets/transition.dart';
 
 class SignUpCompleteForm extends StatelessWidget {
   SignUpCompleteForm({super.key});
-  final controller = Get.find<AccountApi>();
+  final controller = Get.find<AccountController>();
   final registerController = Get.find<RegisterController>();
 
   @override
@@ -77,44 +78,44 @@ class SignUpCompleteForm extends StatelessWidget {
                     registerController.isValidAddress.value,
                 text: 'Đăng ký',
                 press: () async {
-                  Accounts accounts = Accounts();
-                  accounts.email = registerController.emailController.text;
-                  accounts.phoneNumber =
-                      registerController.phonenumberController.text;
-                  accounts.password = registerController.passController.text;
-                  if (registerController.selectedGender != null) {
-                    accounts.gender = registerController.selectedGender;
-                  } else {
-                    CustomSnackBar.showCustomSnackBar(
-                        context, 'Bạn chưa chọn giới tính', 1,
-                        backgroundColor: Colors.red);
-                    return;
-                  }
-                  // if (registerController.image == null) {
-                  //   accounts.imageUrl = await uploadDefaultImage(
-                  //       '${accounts.email}_${accounts.phoneNumber}');
+                  // Accounts accounts = Accounts();
+                  // accounts.email = registerController.emailController.text;
+                  // accounts.phoneNumber =
+                  //     registerController.phonenumberController.text;
+                  // accounts.password = registerController.passController.text;
+                  // if (registerController.selectedGender != null) {
+                  //   accounts.gender = registerController.selectedGender;
                   // } else {
-                  //   accounts.imageUrl = await saveImage(
-                  //       registerController.image,
-                  //       '${accounts.email}_${accounts.phoneNumber}');
+                  //   CustomSnackBar.showCustomSnackBar(
+                  //       context, 'Bạn chưa chọn giới tính', 1,
+                  //       backgroundColor: Colors.red);
+                  //   return;
                   // }
-                  accounts.username =
-                      registerController.fullnameController.text;
-                  accounts.accounttypeid = 2;
-                  accounts.address = registerController.addressController.text;
-                  if (registerController.date != null) {
-                    accounts.birthday = registerController.date;
-                  } else {
-                    CustomSnackBar.showCustomSnackBar(
-                        context, 'Vui lòng kiểm tra ngày sinh!', 1,
-                        backgroundColor: Colors.red);
-                    return;
-                  }
-                  showLoadingAnimation(context);
-                  await controller.createAccount(accounts).whenComplete(() {
-                    slideinTransition(context, const SignInScreen());
-                    registerController.onClose();
-                  });
+                  // // if (registerController.image == null) {
+                  // //   accounts.imageUrl = await uploadDefaultImage(
+                  // //       '${accounts.email}_${accounts.phoneNumber}');
+                  // // } else {
+                  // //   accounts.imageUrl = await saveImage(
+                  // //       registerController.image,
+                  // //       '${accounts.email}_${accounts.phoneNumber}');
+                  // // }
+                  // accounts.username =
+                  //     registerController.fullnameController.text;
+                  // accounts.accounttypeid = 2;
+                  // accounts.address = registerController.addressController.text;
+                  // if (registerController.date != null) {
+                  //   accounts.birthday = registerController.date;
+                  // } else {
+                  //   CustomSnackBar.showCustomSnackBar(
+                  //       context, 'Vui lòng kiểm tra ngày sinh!', 1,
+                  //       backgroundColor: Colors.red);
+                  //   return;
+                  // }
+                  // showLoadingAnimation(context);
+                  // await controller.createAccount(accounts).whenComplete(() {
+                  //   slideinTransition(context, const SignInScreen());
+                  //   registerController.onClose();
+                  // });
                 },
               ),
             ]),
