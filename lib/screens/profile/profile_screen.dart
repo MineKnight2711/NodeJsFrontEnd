@@ -8,6 +8,7 @@ import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/profile_controller.dart';
 import 'package:quanlyquantrasua/model/account_response.dart';
 import 'package:quanlyquantrasua/model/account_update_model.dart';
+import 'package:quanlyquantrasua/model/user_model.dart';
 import 'package:quanlyquantrasua/screens/home/home_screens.dart';
 import 'package:quanlyquantrasua/test/select_image_constant/image_select.dart';
 
@@ -19,8 +20,8 @@ import 'package:quanlyquantrasua/widgets/custom_widgets/showLoading.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/transition.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  final AccountResponse account;
-  EditProfileScreen({super.key, required this.account});
+  final UserModel user;
+  EditProfileScreen({super.key, required this.user});
   final profileController = Get.find<ProfileController>();
   final accountController = Get.find<AccountController>();
   @override
@@ -43,19 +44,19 @@ class EditProfileScreen extends StatelessWidget {
             onImageSelected: (value) {
               profileController.image = value;
             },
-            currentImageUrl: account.imageUrl,
+            currentImageUrl: user.imageUrl,
           ),
           SizedBox(
             height: mediaHeight(context, 23),
           ),
-          BirthdayDatePickerWidget(
-            initialDate: account.birthday != null
-                ? DateTime.parse(account.birthday!)
-                : DateTime.now(),
-            onChanged: (value) {
-              profileController.date = value;
-            },
-          ),
+          // BirthdayDatePickerWidget(
+          //   initialDate: user.birthday != null
+          //       ? DateTime.parse(account.birthday!)
+          //       : DateTime.now(),
+          //   onChanged: (value) {
+          //     profileController.date = value;
+          //   },
+          // ),
           SizedBox(
             height: mediaHeight(context, 50),
           ),

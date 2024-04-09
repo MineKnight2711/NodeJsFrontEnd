@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:get/get.dart';
 import 'package:quanlyquantrasua/model/account_response.dart';
+import 'package:quanlyquantrasua/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountController extends GetxController {
-  Rx<AccountResponse?> accountRespone = Rx<AccountResponse?>(null);
+  Rx<UserModel?> userSession = Rx<UserModel?>(null);
   @override
   void onInit() {
     super.onInit();
@@ -14,37 +13,37 @@ class AccountController extends GetxController {
   }
 
   Future fetchCurrent() async {
-    accountRespone.value =
-        await AccountController().getUserFromSharedPreferences();
+    userSession.value = await getUserFromSharedPreferences();
   }
 
-  Future<void> storedUserToSharedRefererces(
-      AccountResponse accountResponse) async {
+  Future<void> storedUserToSharedRefererces(UserModel? user) async {
     final prefs = await SharedPreferences.getInstance();
-    final accountJsonEncode = jsonEncode(accountResponse);
-    await prefs.setString('currrent_account', accountJsonEncode);
+    final accountJsonEncode = jsonEncode(user?.toJson());
+    await prefs.setString('current_user', accountJsonEncode);
   }
 
-  Future<AccountResponse?> loadUserInfo() async {
-    final prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString('currrent_account') ?? '';
-    if (jsonString.isNotEmpty) {
-      return AccountResponse.fromJson(jsonDecode(jsonString));
-    }
-    return null;
-  }
+  // Future<UserModel?> loadUserInfo() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final jsonString = prefs.getString('current_user') ?? '';
+  //   if (jsonString.isNotEmpty) {
+  //     return UserModel.fromJson(jsonDecode(jsonString));
+  //   }
+  //   return null;
+  // }
 
-  Future<AccountResponse?> getUserFromSharedPreferences() async {
+  Future<UserModel?> getUserFromSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString('currrent_account') ?? '';
-    if (jsonString.isNotEmpty) {
-      return AccountResponse.fromJson(jsonDecode(jsonString));
+    final currentUser = prefs.getString('current_user');
+    if (currentUser != null) {
+      final userJson = jsonDecode(currentUser);
+      return UserModel.fromJson(userJson);
     }
     return null;
   }
 
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.remove('currrent_account');
+    prefs.remove('current_user');
+    userSession.value = null;
   }
 }

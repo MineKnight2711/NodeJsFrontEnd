@@ -79,7 +79,7 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         SizedBox(
           width: 45,
           child: Obx(() {
-            if (controller.accountRespone.value == null) {
+            if (controller.userSession.value == null) {
               return Container(
                 width: 45,
                 margin: const EdgeInsets.symmetric(vertical: 5),
@@ -95,22 +95,21 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 child: GestureDetector(
                   onTap: () {
-                    Get.put(LoginController());
+                    Get.put(AuthController());
                     slideinTransition(context, const SignInScreen());
                   },
                 ),
               );
             } else {
-              String? imageUrl = controller.accountRespone.value?.imageUrl;
               return Container(
                 width: 45,
                 margin: const EdgeInsets.symmetric(vertical: 5),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
-                    image: imageUrl != null
+                    image: controller.userSession.value?.imageUrl != null
                         ? Image.network(
-                            imageUrl,
+                            "${controller.userSession.value?.imageUrl}",
                           ).image
                         : Image.asset(
                             'assets/images/profile.png',
@@ -147,15 +146,15 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: EdgeInsets.zero,
         children: [
           Obx(() {
-            if (controller.accountRespone.value != null) {
-              final accounts = controller.accountRespone.value!;
-              if (accounts.imageUrl != null) {
+            if (controller.userSession.value != null) {
+              final accounts = controller.userSession.value!;
+              if (accounts.imageUrl.isNotEmpty) {
                 avt = accounts.imageUrl;
               } else {
                 avt = 'assets/images/avt.png';
               }
               return MyDrawerHeader(
-                fullName: '${accounts.fullName}',
+                fullName: '${accounts.username}',
                 email: '${accounts.email}',
                 avatarUrl: '$avt',
               );
@@ -165,14 +164,14 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ListTile(
             title: const Text('Cập nhật thông tin'),
             onTap: () {
-              if (controller.accountRespone.value == null) {
+              if (controller.userSession.value == null) {
                 CustomErrorMessage.showMessage(
                     'Có lỗi xảy ra!\nVui lòng đăng nhập lại để thực hiện thao tác này! ');
                 return;
               }
-              Get.put(ProfileController(controller.accountRespone.value!));
+              Get.put(ProfileController(controller.userSession.value!));
               slideinTransition(context,
-                  EditProfileScreen(account: controller.accountRespone.value!));
+                  EditProfileScreen(user: controller.userSession.value!));
             },
           ),
           ListTile(

@@ -102,8 +102,7 @@ class OrderDetailsBottomSheetState extends State<OrderDetailsBottomSheet> {
                                   'Bạn chưa chọn kích cỡ!');
                               return;
                             }
-                            if (accountController.accountRespone.value ==
-                                null) {
+                            if (accountController.userSession.value == null) {
                               CustomErrorMessage.showMessage(
                                   'Vui lòng đăng nhập để đặt hàng!');
                               return;

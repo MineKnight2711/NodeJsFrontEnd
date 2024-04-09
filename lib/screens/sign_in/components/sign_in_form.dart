@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quanlyquantrasua/api/account/account_api.dart';
 import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/change_password_controller.dart';
 import 'package:quanlyquantrasua/controller/login_controller.dart';
-import 'package:quanlyquantrasua/model/account_model.dart';
-
 import 'package:quanlyquantrasua/screens/home/home_screens.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/custom_input_textformfield.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/messages_widget.dart';
@@ -29,7 +26,7 @@ class _SignInFormState extends State<SignInForm> {
   bool isValidEmail = false;
   bool isValidPassword = false;
   final controller = Get.find<AccountController>();
-  final _auth = Get.find<LoginController>();
+  final _auth = Get.find<AuthController>();
   // late AuthController authController;
 
   // late GetCartUserController cartController;
@@ -39,9 +36,6 @@ class _SignInFormState extends State<SignInForm> {
     super.initState();
     emailController = TextEditingController();
     passwordController = TextEditingController();
-    // controller = Get.put(LoginAccountInfoController());
-    // authController = Get.put(AuthController());
-    // cartController = Get.put(GetCartUserController());
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -120,10 +114,19 @@ class _SignInFormState extends State<SignInForm> {
 
             final result = await _auth.login(
                 emailController.text, passwordController.text);
-            if (result) {
-              CustomSnackBar.showCustomSnackBar(
-                  context, 'Đăng nhập thành công!', 2);
-              slideinTransitionNoBack(context, HomeScreenView());
+            if (result.success) {
+              final info = await _auth.getUserInfo(result.data);
+              if (info) {
+                CustomSnackBar.showCustomSnackBar(
+                    context, 'Đăng nhập thành công!', 2);
+                Get.offAll(() => HomeScreenView(),
+                    transition: Transition.fadeIn);
+                // slideinTransitionNoBack(context, HomeScreenView());
+              } else {
+                CustomSnackBar.showCustomSnackBar(
+                    context, 'Đăng nhập thất bại!', 1,
+                    backgroundColor: Colors.red);
+              }
             } else {
               CustomSnackBar.showCustomSnackBar(
                   context, 'Đăng nhập thất bại!', 1,

@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quanlyquantrasua/model/account_response.dart';
+import 'package:quanlyquantrasua/model/user_model.dart';
 
 class ProfileController extends GetxController {
-  final AccountResponse account;
-  ProfileController(this.account);
+  final UserModel user;
+  ProfileController(this.user);
   var isValidFullname = true.obs;
   var isValidPhonenumber = true.obs;
   var isValidAddress = true.obs;
@@ -23,9 +24,7 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fullnameController.text = account.fullName.toString();
-    phonenumberController.text = account.phoneNumber.toString();
-    addressController.text = account.address.toString();
+    fullnameController.text = user.username.toString();
   }
 
   @override

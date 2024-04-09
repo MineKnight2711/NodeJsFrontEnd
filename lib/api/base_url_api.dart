@@ -9,13 +9,13 @@ class ApiUrl {
   static const apiChangePassword = '${baseUrl}accounts/changepassword';
   static const apiGetDishesByCategory = '${baseUrl}dish/getByCategory';
   // static const apiCreateCategory = '${baseUrl}user/id/';
-  ///// Api của Tính
+
   static const apiGetAllCategory = '${baseUrl}category';
   static const apiGetAllSize = '${baseUrl}size';
   static const apiGetAllProduct = '${baseUrl}drink';
 
-  //// Api của Quý
   static const apiLogin = '${baseUrl}auth/login';
+  static const apiGetUserInfo = '${baseUrl}auth/me';
   static const apiGetAllToppings = '${baseUrl}topping';
   static const apiCreateOrder = '${baseUrl}orders';
   static const apiUpdateAccount = '${baseUrl}accounts/update';

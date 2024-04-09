@@ -1,12 +1,16 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:quanlyquantrasua/configs/colors.dart';
+import 'package:quanlyquantrasua/configs/font.dart';
 import 'package:quanlyquantrasua/configs/mediaquery.dart';
 import 'package:quanlyquantrasua/controller/drink_controller.dart';
 import '../../../utils/format_currency.dart';
 import '../../product-detail/product_bottom_sheet/details_bottom_sheet.dart';
-import '../banner/banner_list.dart';
+import '../data/list_dish.dart';
 import 'list_category.dart';
 
 class GroceryContainer extends StatelessWidget {
@@ -16,20 +20,31 @@ class GroceryContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ///// HIEN THI DANH MUC TU WIDGET CATEGORY O DAY ////
-        Column(
-          children: [
-            MenuCategoryList(),
-          ],
+        SizedBox(
+          height: 15.h,
         ),
-        const SizedBox(
-          height: 19.0,
+        MenuCategoryList(),
+        SizedBox(
+          height: 15.h,
         ),
-        //WIDGET HIEN THI BANNER VOUCHER O DAY//
-        const Column(
-          children: [
-            BannerList(),
-          ],
+        CarouselSlider(
+          options: CarouselOptions(
+            autoPlay: true,
+            aspectRatio: 2.5,
+            viewportFraction: 0.72,
+            enlargeCenterPage: true,
+          ),
+          items: ListDataTemp.banner
+              .map(
+                (item) => Card(
+                  elevation: 3,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.asset(item, fit: BoxFit.fill),
+                  ),
+                ),
+              )
+              .toList(),
         ),
         const SizedBox(
           height: 26.22,
@@ -39,21 +54,13 @@ class GroceryContainer extends StatelessWidget {
           margin: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Row(
             children: [
-              Text(
-                "Món Mới Về Nè...",
-                style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              Text("Món Mới Về Nè...",
+                  style: CustomFonts.nunitoFont(fontSize: 14.r)),
               const Spacer(),
               Text(
                 "Xem Tất Cả",
-                style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xff1CB069),
-                ),
+                style: CustomFonts.nunitoFont(
+                    fontSize: 14.r, color: AppColors.appTheme),
               ),
             ],
           ),
@@ -77,24 +84,23 @@ class ListDishView extends StatelessWidget {
     return Obx(() {
       if (controller.listDrink.isNotEmpty) {
         int numberOfItems = controller.listDrink.length;
-        double itemHeight = mediaHeight(context, 8);
+        double itemHeight = 0.45.sh;
+        int numRows =
+            (numberOfItems + 1) ~/ 2; // Use integer division to round up
 
-        int mainAxisCount = 15;
-        double height = (numberOfItems + mainAxisCount).ceil() * itemHeight;
-
+        double height = numRows * itemHeight;
         return Container(
           width: double.infinity,
           height: height,
           margin: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: StaggeredGridView.countBuilder(
-            crossAxisCount: 2,
+          child: MasonryGridView.count(
             physics: const NeverScrollableScrollPhysics(),
-            staggeredTileBuilder: (index) => const StaggeredTile.fit(1),
-            mainAxisSpacing: 15,
-            crossAxisSpacing: 8.0,
             itemCount: controller.listDrink.length,
-            itemBuilder: (BuildContext context, int index) {
-              var item = controller.listDrink[index];
+            crossAxisCount: 2,
+            mainAxisSpacing: 4,
+            crossAxisSpacing: 4,
+            itemBuilder: (context, index) {
+              final drink = controller.listDrink[index];
               return InkWell(
                 onTap: () {
                   showModalBottomSheet(
@@ -109,7 +115,7 @@ class ListDishView extends StatelessWidget {
                     backgroundColor: Colors.white,
                     builder: (BuildContext context) {
                       return OrderDetailsBottomSheet(
-                        drink: item,
+                        drink: drink,
                       );
                     },
                   );
@@ -130,7 +136,7 @@ class ListDishView extends StatelessWidget {
                         child: AspectRatio(
                           aspectRatio: 160.06 / 190.42,
                           child: Image.network(
-                            item.imageUrl,
+                            drink.imageUrl,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -141,7 +147,7 @@ class ListDishView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item.drinkName,
+                              drink.drinkName,
                               style: GoogleFonts.nunito(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -150,7 +156,7 @@ class ListDishView extends StatelessWidget {
                             ),
                             const SizedBox(height: 4.0),
                             Text(
-                              "${item.category.categoryName}",
+                              "${drink.category.categoryName}",
                               style: GoogleFonts.poppins(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
@@ -161,7 +167,7 @@ class ListDishView extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  formatCurrency(item.price),
+                                  formatCurrency(drink.price),
                                   style: GoogleFonts.poppins(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
@@ -180,6 +186,19 @@ class ListDishView extends StatelessWidget {
               );
             },
           ),
+          // GridView.count(
+          //     crossAxisCount: 2,
+          //     childAspectRatio: 0.6,
+          //     physics: const NeverScrollableScrollPhysics(),
+          //     // staggeredTileBuilder: (index) => const StaggeredTile.fit(1),
+          //     mainAxisSpacing: 15,
+          //     crossAxisSpacing: 8.0,
+          //     // itemCount: controller.listDrink.length,
+          //     children: controller.listDrink
+          //         .map(
+          //           (drink) =>
+          //         )
+          //         .toList()),
         );
       }
       return const Center(
