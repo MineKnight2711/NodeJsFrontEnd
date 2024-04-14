@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quanlyquantrasua/configs/colors.dart';
 import 'package:quanlyquantrasua/configs/font.dart';
-import 'package:quanlyquantrasua/configs/mediaquery.dart';
 import 'package:quanlyquantrasua/controller/drink_controller.dart';
 import '../../../utils/format_currency.dart';
 import '../../product-detail/product_bottom_sheet/details_bottom_sheet.dart';

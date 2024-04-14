@@ -9,24 +9,12 @@ import 'package:quanlyquantrasua/widgets/custom_widgets/custom_appbar.dart';
 import '../../controller/cart_controller.dart';
 import '../../widgets/custom_widgets/default_button.dart';
 
-class CartScreen extends StatefulWidget {
-  const CartScreen({
-    super.key,
-  });
-
-  @override
-  CartScreenState createState() => CartScreenState();
-}
-
-class CartScreenState extends State<CartScreen> {
+class CartScreen extends StatelessWidget {
   final cartController = Get.find<CartController>();
 
   final userController = Get.find<AccountController>();
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,50 +28,14 @@ class CartScreenState extends State<CartScreen> {
         appBarBackgroundColor: Colors.white,
       ),
       body: Obx(() {
-        if (cartController.cartItem.isNotEmpty) {
-          final listItem = cartController.cartItem;
-          var checkedItemFromList = cartController.checkedItem;
+        if (cartController.listCart.isNotEmpty) {
           return Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: checkedItemFromList.length == listItem.length
-                            ? checkedItemFromList.isNotEmpty
-                            : cartController.isCheckAll,
-                        onChanged: (value) {
-                          setState(() {
-                            cartController.isCheckAll = value ?? false;
-                            cartController.checkAll();
-                          });
-                        },
-                      ),
-                      const Text('Chọn tất cả'),
-                    ],
-                  ),
-                  const Spacer(),
-                  Container(
-                    width: size.width / 2.8,
-                    height: size.height / 24,
-                    margin: const EdgeInsets.only(right: 10),
-                    child: DefaultButton(
-                      enabled: cartController.isCheckAll,
-                      press: () {
-                        cartController.clearCart();
-                      },
-                      text: 'Xoá giỏ hàng',
-                    ),
-                  ),
-                ],
-              ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: listItem.length,
+                  itemCount: cartController.listCart.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final item = listItem[index];
+                    final item = cartController.listCart[index];
                     return Dismissible(
                       key: Key(item.hashCode.toString()),
                       direction: DismissDirection.endToStart,
@@ -99,9 +51,7 @@ class CartScreenState extends State<CartScreen> {
                         ),
                       ),
                       onDismissed: (direction) {
-                        setState(() {
-                          cartController.removeItem(item);
-                        });
+                        cartController.deleteCartItem(item.id);
                       },
                       child: ListTile(
                         leading: SizedBox(
@@ -112,18 +62,21 @@ class CartScreenState extends State<CartScreen> {
                               Positioned(
                                 left: 1,
                                 right: 85,
-                                child: Checkbox(
-                                  value: cartController
-                                              .queryChekedItemList(item) !=
-                                          -1
-                                      ? true
-                                      : cartController.isCheckAll,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      cartController.isCheckAll = false;
-                                      cartController.checkPerItem(item);
-                                    });
-                                  },
+                                child: Obx(
+                                  () => Checkbox(
+                                    value: cartController.checkedItems.any(
+                                        (checkedItem) =>
+                                            checkedItem.id == item.id),
+                                    onChanged: (value) {
+                                      if (value ?? false) {
+                                        cartController.checkedItems.add(item);
+                                      } else {
+                                        cartController.checkedItems.removeWhere(
+                                            (checkedItem) =>
+                                                checkedItem.id == item.id);
+                                      }
+                                    },
+                                  ),
                                 ),
                               ),
                               Align(
@@ -161,30 +114,31 @@ class CartScreenState extends State<CartScreen> {
                         subtitle: Text("${item.drink.category.categoryName}"),
                         trailing: Column(
                           children: [
-                            EditCartItemButton(
-                              isEnabled:
-                                  cartController.queryChekedItemList(item) ==
-                                      -1,
-                              onTap: () {
-                                showModalBottomSheet(
-                                  context: context,
-                                  isScrollControlled: true,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
+                            Obx(
+                              () => EditCartItemButton(
+                                isEnabled: cartController.checkedItems.any(
+                                    (checkedItem) => checkedItem.id == item.id),
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
+                                      ),
                                     ),
-                                  ),
-                                  backgroundColor: Colors.white,
-                                  builder: (BuildContext context) {
-                                    return EditCartItemBottomSheet(
-                                        cartItem: item);
-                                  },
-                                );
-                              },
+                                    backgroundColor: Colors.white,
+                                    builder: (BuildContext context) {
+                                      return EditCartItemBottomSheet(
+                                          cartItem: item);
+                                    },
+                                  );
+                                },
+                              ),
                             ),
                             Text(
-                                ' ${formatCurrency(cartController.calculateItemTotal(item))}'),
+                                ' ${formatCurrency(item.quantity * item.drink.price)}'),
                           ],
                         ),
                       ),
@@ -252,7 +206,8 @@ class CartScreenState extends State<CartScreen> {
               //   Navigator.pop(context);
               // });
             },
-            totalPrice: cartController.totalPrice.value),
+            totalPrice: cartController.checkedItems
+                .fold(0.0, (preValue, cart) => preValue += cart.drink.price)),
       ),
     );
   }

@@ -1,14 +1,10 @@
 // ignore_for_file: prefer_final_fields
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quanlyquantrasua/api/account/account_api.dart';
 import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/cart_controller.dart';
-import 'package:quanlyquantrasua/model/cart_model.dart';
 import 'package:quanlyquantrasua/model/drink_model.dart';
-
 import 'package:quanlyquantrasua/model/size_model.dart';
 import 'package:quanlyquantrasua/model/topping_model.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/default_button.dart';
@@ -96,7 +92,7 @@ class OrderDetailsBottomSheetState extends State<OrderDetailsBottomSheet> {
                         height: size.height / 14,
                         width: size.width,
                         child: StyledGradienButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (selectedSize == null) {
                               CustomErrorMessage.showMessage(
                                   'Bạn chưa chọn kích cỡ!');
@@ -108,15 +104,23 @@ class OrderDetailsBottomSheetState extends State<OrderDetailsBottomSheet> {
                               return;
                             }
                             showLoadingAnimation(context);
-                            cartControler.addToCart(CartItem(
-                                drink: widget.drink,
-                                quantity: numOfItem,
-                                size: selectedSize!,
-                                toppings: listChosenTopping ?? []));
-                            Future.delayed(const Duration(seconds: 1), () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            });
+                            final result = await cartControler.addToCart(
+                                accountController.userSession.value!.id,
+                                widget.drink.id,
+                                selectedSize!.id);
+                            if (result.success) {
+                              CustomToastMessage.showMessage(
+                                  "Đã thêm vào giỏ hàng");
+                              Future.delayed(const Duration(seconds: 1), () {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              });
+                            } else {
+                              CustomToastMessage.showMessage(result.data);
+                              Future.delayed(const Duration(seconds: 1), () {
+                                Navigator.pop(context);
+                              });
+                            }
                           },
                           buttonText: 'Thêm vào giỏ',
                           buttonIconAssets: 'assets/images/cart_add.png',

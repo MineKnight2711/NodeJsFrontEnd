@@ -28,11 +28,24 @@ class AuthController extends GetxController {
   Future<bool> getUserInfo(String token) async {
     final response = await _auth.getUserInfo(token);
     if (response.success) {
+      print(response.data);
       _accountController.userSession.value = UserModel.fromJson(response.data);
       _accountController
           .storedUserToSharedRefererces(_accountController.userSession.value);
       return true;
     }
     return false;
+  }
+
+  Future<bool> register(String fullName, String password, String email,
+      String address, String phone, String gender) async {
+    final response =
+        await _auth.register(fullName, password, email, address, phone, gender);
+    return response.success;
+  }
+
+  Future<bool> forgotPassword(String email) async {
+    final response = await _auth.forgotPassword(email);
+    return response.success;
   }
 }

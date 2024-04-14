@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/cart_controller.dart';
 import 'package:quanlyquantrasua/controller/change_password_controller.dart';
-import 'package:quanlyquantrasua/controller/login_controller.dart';
+import 'package:quanlyquantrasua/controller/auth_controller.dart';
 import 'package:quanlyquantrasua/controller/profile_controller.dart';
 import 'package:quanlyquantrasua/screens/home/home_screens.dart';
 import 'package:quanlyquantrasua/screens/profile/profile_screen.dart';
@@ -48,7 +48,9 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               alignment: Alignment.center,
               child: GestureDetector(
                 onTap: () {
-                  slideinTransition(context, const CartScreen());
+                  controller.fetchCurrent();
+                  cartController.getByUserId();
+                  slideinTransition(context, CartScreen());
                 },
                 child: const Icon(
                   Icons.shopping_cart_outlined,
@@ -65,7 +67,7 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 backgroundColor: Colors.red,
                 child: Obx(
                   () => Text(
-                    '${cartController.cartItem.length}',
+                    '${cartController.listCart.length}',
                     style: const TextStyle(fontSize: 10),
                   ),
                 ),
@@ -154,8 +156,8 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 avt = 'assets/images/avt.png';
               }
               return MyDrawerHeader(
-                fullName: '${accounts.username}',
-                email: '${accounts.email}',
+                fullName: accounts.username,
+                email: accounts.email,
                 avatarUrl: '$avt',
               );
             }

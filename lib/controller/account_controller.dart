@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:quanlyquantrasua/model/account_response.dart';
 import 'package:quanlyquantrasua/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,15 +20,6 @@ class AccountController extends GetxController {
     final accountJsonEncode = jsonEncode(user?.toJson());
     await prefs.setString('current_user', accountJsonEncode);
   }
-
-  // Future<UserModel?> loadUserInfo() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   final jsonString = prefs.getString('current_user') ?? '';
-  //   if (jsonString.isNotEmpty) {
-  //     return UserModel.fromJson(jsonDecode(jsonString));
-  //   }
-  //   return null;
-  // }
 
   Future<UserModel?> getUserFromSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();

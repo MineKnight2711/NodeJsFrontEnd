@@ -8,13 +8,14 @@ import 'package:quanlyquantrasua/screens/cart/components/current_chosen_toppings
 import 'package:quanlyquantrasua/screens/product-detail/components/quantity_select.dart';
 import 'package:quanlyquantrasua/screens/product-detail/components/size_choices.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/default_button.dart';
+import 'package:quanlyquantrasua/widgets/custom_widgets/messages_widget.dart';
 
 import '../../../model/size_model.dart';
 import '../../../model/topping_model.dart';
 
 class EditCartItemBottomSheet extends StatefulWidget {
   const EditCartItemBottomSheet({super.key, required this.cartItem});
-  final CartItem cartItem;
+  final CartModel cartItem;
   @override
   State<EditCartItemBottomSheet> createState() =>
       _EditCartItemBottomSheetState();
@@ -124,13 +125,14 @@ class _EditCartItemBottomSheetState extends State<EditCartItemBottomSheet> {
             currentToppings: widget.cartItem.toppings,
           ),
           DefaultButton(
-            press: () {
-              final updatedItem = widget.cartItem.copyWith(
-                size: selectedSize,
-                quantity: currentQuantity,
-                toppings: selectedToppings,
-              );
-              cartController.updateCartItem(widget.cartItem, updatedItem);
+            press: () async {
+              final result = await cartController.updateCartItem(
+                  widget.cartItem.id, currentQuantity);
+              if (result.success) {
+                CustomToastMessage.showMessage("Cập nhật thành công");
+              } else {
+                CustomErrorMessage.showMessage(result.data);
+              }
             },
             text: "Lưu",
           )

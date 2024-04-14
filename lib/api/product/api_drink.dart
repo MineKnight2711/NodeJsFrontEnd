@@ -7,7 +7,6 @@ class DrinkApi {
   Future<ResponseModel> getAllDish() async {
     final url = Uri.parse(ApiUrl.apiGetAllProduct);
     final response = await http.get(url);
-    print(response.body);
     if (response.statusCode == 200) {
       return ResponseModel.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes)));

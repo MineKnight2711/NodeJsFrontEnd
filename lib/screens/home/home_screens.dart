@@ -9,6 +9,7 @@ import 'package:quanlyquantrasua/configs/font.dart';
 import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/cart_controller.dart';
 import 'package:quanlyquantrasua/controller/category_controller.dart';
+import 'package:quanlyquantrasua/controller/drink_controller.dart';
 
 import '../search_screen/search_drink_screen.dart';
 import 'components/home_appbar.dart';
@@ -21,11 +22,13 @@ class HomeScreenView extends StatelessWidget {
 
   final accountController = Get.find<AccountController>();
   final _categoryController = Get.find<CategoryController>();
+  final _drinkController = Get.find<DrinkController>();
   // final toppingController = Get.put(ToppingApi());
 
   final cartController = Get.put(CartController());
   Future<void> _refesh() async {
     _categoryController.getAllCategory();
+    _drinkController.getAllDrink();
     // await toppingController.getAllTopping();
   }
 

@@ -3,11 +3,6 @@ class ApiUrl {
 
   static const apiGetAllAccount = '${baseUrl}accounts/all';
 
-  ///// Api của Đạt-------------------------------------------------
-  static const apiCreateAccount = '${baseUrl}accounts';
-  static const apiSendOTP = '${baseUrl}accounts/otp';
-  static const apiChangePassword = '${baseUrl}accounts/changepassword';
-  static const apiGetDishesByCategory = '${baseUrl}dish/getByCategory';
   // static const apiCreateCategory = '${baseUrl}user/id/';
 
   static const apiGetAllCategory = '${baseUrl}category';
@@ -15,7 +10,10 @@ class ApiUrl {
   static const apiGetAllProduct = '${baseUrl}drink';
 
   static const apiLogin = '${baseUrl}auth/login';
+  static const apiRegister = '${baseUrl}auth/register';
   static const apiGetUserInfo = '${baseUrl}auth/me';
+  static const apiForgotPassword = '${baseUrl}auth/forgotPassword';
+  static const apiCart = '${baseUrl}cart';
   static const apiGetAllToppings = '${baseUrl}topping';
   static const apiCreateOrder = '${baseUrl}orders';
   static const apiUpdateAccount = '${baseUrl}accounts/update';
