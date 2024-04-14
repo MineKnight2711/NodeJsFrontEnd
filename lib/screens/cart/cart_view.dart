@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:quanlyquantrasua/configs/mediaquery.dart';
 import 'package:quanlyquantrasua/controller/account_controller.dart';
@@ -54,6 +55,8 @@ class CartScreen extends StatelessWidget {
                         cartController.deleteCartItem(item.id);
                       },
                       child: ListTile(
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 10.h, vertical: 5.h),
                         leading: SizedBox(
                           height: size.height / 10,
                           width: size.width / 4,
@@ -85,9 +88,9 @@ class CartScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(7),
                                   child: SizedBox(
                                     height: size.height / 10,
-                                    width: size.width / 5.5,
+                                    width: size.width / 7,
                                     child: Image.network(
-                                      "${item.drink.imageUrl}",
+                                      item.drink.imageUrl,
                                       fit: BoxFit.fill,
                                     ),
                                   ),
@@ -105,18 +108,17 @@ class CartScreen extends StatelessWidget {
                                 style: const TextStyle(color: Colors.black),
                               ),
                               TextSpan(
-                                text: "${item.size.sizeName}",
+                                text: item.size.sizeName,
                                 style: const TextStyle(color: Colors.blue),
                               ),
                             ],
                           ),
                         ),
-                        subtitle: Text("${item.drink.category.categoryName}"),
                         trailing: Column(
                           children: [
                             Obx(
                               () => EditCartItemButton(
-                                isEnabled: cartController.checkedItems.any(
+                                isEnabled: !cartController.checkedItems.any(
                                     (checkedItem) => checkedItem.id == item.id),
                                 onTap: () {
                                   showModalBottomSheet(

@@ -35,6 +35,9 @@ class CartController extends GetxController {
   }
 
   Future<ResponseModel> deleteCartItem(String cartId) async {
+    if (checkedItems.any((c) => c.id == cartId)) {
+      checkedItems.removeWhere((element) => element.id == cartId);
+    }
     return await _cartApi.deleteCartItem(cartId);
   }
 

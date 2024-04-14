@@ -1,21 +1,38 @@
-import 'package:flutter/foundation.dart';
-import 'package:quanlyquantrasua/model/user_model.dart';
+import 'package:quanlyquantrasua/model/size_model.dart';
+import 'package:quanlyquantrasua/model/topping_model.dart';
 
-import 'drink_model.dart';
-import 'size_model.dart';
-import 'topping_model.dart';
+class ItemDrink {
+  final String id;
+  final String drinkName;
+  final String imageUrl;
+  final double price;
+
+  ItemDrink({
+    required this.id,
+    required this.drinkName,
+    required this.imageUrl,
+    required this.price,
+  });
+
+  factory ItemDrink.fromJson(Map<String, dynamic> json) {
+    return ItemDrink(
+      id: json['_id'],
+      drinkName: json['drinkName'],
+      imageUrl: json['imageUrl'],
+      price: json['price'].toDouble(),
+    );
+  }
+}
 
 class CartModel {
   final String id;
   final String user;
-  final DrinkModel drink;
+  final ItemDrink drink;
   final SizeModel size;
   final bool isHot;
   final List<ToppingModel> toppings;
   final int quantity;
   final bool isDeleted;
-  final DateTime createdAt;
-  final DateTime updatedAt;
 
   CartModel({
     required this.id,
@@ -26,15 +43,13 @@ class CartModel {
     required this.toppings,
     required this.quantity,
     required this.isDeleted,
-    required this.createdAt,
-    required this.updatedAt,
   });
 
   factory CartModel.fromJson(Map<String, dynamic> json) {
     return CartModel(
       id: json['_id'],
-      user: json['user']["_id"],
-      drink: DrinkModel.fromJson(json['drink']),
+      user: json['user'],
+      drink: ItemDrink.fromJson(json['drink']),
       size: SizeModel.fromJson(json['size']),
       isHot: json['is_hot'],
       toppings: (json['toppings'] as List)
@@ -42,8 +57,6 @@ class CartModel {
           .toList(),
       quantity: json['quantity'],
       isDeleted: json['isDelete'] == 'false',
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
 }
