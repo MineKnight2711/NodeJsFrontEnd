@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:quanlyquantrasua/api/account/account_api.dart';
+import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/custom_appbar.dart';
-
-import '../model/account_model.dart';
-import '../widgets/custom_widgets/messages_widget.dart';
 
 class CreateAccountScreen extends StatelessWidget {
   CreateAccountScreen({super.key});
-  final controller = Get.find<AccountApi>();
+  final controller = Get.find<AccountController>();
   @override
   Widget build(BuildContext context) {
     TextEditingController usernameController = TextEditingController();
@@ -94,26 +90,26 @@ class CreateAccountScreen extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 70),
         child: FloatingActionButton(
           onPressed: () async {
-            Accounts accounts = Accounts();
-            accounts.username = usernameController.text;
-            accounts.password = passwordController.text;
-            accounts.phoneNumber = phonenumberController.text;
-            accounts.email = emailController.text;
-            accounts.gender = genderController.text;
-            // create a DateFormat object for the input date format
-            DateFormat inputFormat = DateFormat('dd/MM/yyyy');
+            // Accounts accounts = Accounts();
+            // accounts.username = usernameController.text;
+            // accounts.password = passwordController.text;
+            // accounts.phoneNumber = phonenumberController.text;
+            // accounts.email = emailController.text;
+            // accounts.gender = genderController.text;
+            // // create a DateFormat object for the input date format
+            // DateFormat inputFormat = DateFormat('dd/MM/yyyy');
 
-            // parse the input string into a DateTime object
-            DateTime birthday = inputFormat.parse(birthdayController.text);
-            accounts.birthday = birthday;
-            accounts.address = addressController.text;
-            accounts.accounttypeid = 3;
-            await controller.createAccount(accounts).whenComplete(() {
-              CustomSnackBar.showCustomSnackBar(
-                  context, 'Thêm tài khoản thành công', 2,
-                  backgroundColor: Colors.blue);
-              Navigator.pop(context);
-            });
+            // // parse the input string into a DateTime object
+            // DateTime birthday = inputFormat.parse(birthdayController.text);
+            // accounts.birthday = birthday;
+            // accounts.address = addressController.text;
+            // accounts.accounttypeid = 3;
+            // await controller.createAccount(accounts).whenComplete(() {
+            //   CustomSnackBar.showCustomSnackBar(
+            //       context, 'Thêm tài khoản thành công', 2,
+            //       backgroundColor: Colors.blue);
+            //   Navigator.pop(context);
+            // });
           },
           backgroundColor: Colors.blue,
           shape: const StadiumBorder(),

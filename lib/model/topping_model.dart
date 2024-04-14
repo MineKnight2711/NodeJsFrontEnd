@@ -1,15 +1,13 @@
 class ToppingModel {
-  int? toppingID;
-  String? unit;
-  String? image;
+  String id;
+  String? imageUrl;
   double? price;
   String? toppingName;
   bool selected;
 
   ToppingModel({
-    this.toppingID,
-    this.unit,
-    this.image,
+    required this.id,
+    this.imageUrl,
     this.price,
     this.toppingName,
     this.selected = false,
@@ -17,19 +15,18 @@ class ToppingModel {
 
   factory ToppingModel.fromJson(Map<String, dynamic> json) {
     return ToppingModel(
-      toppingID: json['toppingID'],
-      unit: json['unit'],
-      image: json['image'],
-      price: json['price'],
+      id: json['_id'],
+      imageUrl: json['imageUrl'],
+      price: json['price'].toDouble(),
       toppingName: json['toppingName'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'toppingID': toppingID,
-      'unit': unit,
-      'image': image,
+      'id': id,
+      // 'unit': unit,
+      'imageUrl': imageUrl,
       'price': price,
       'toppingName': toppingName,
     };

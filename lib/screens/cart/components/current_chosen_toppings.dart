@@ -71,12 +71,12 @@ class CurrentToppingChoiceWidgetState
                         Row(
                           children: [
                             Image.network(
-                              "${topping.image}",
+                              "${topping.imageUrl}",
                               width: 30,
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              '\$${topping.price?.toStringAsFixed(2)} / ${topping.unit}',
+                              '\$${topping.price?.toStringAsFixed(2)}',
                               style: const TextStyle(fontSize: 14),
                             ),
                           ],

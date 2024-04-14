@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quanlyquantrasua/api/account/account_api.dart';
+import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/register_controller.dart';
 import 'package:quanlyquantrasua/screens/sign_up/sign_up_complete_screen.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/custom_input_textformfield.dart';
@@ -9,7 +10,7 @@ import '../../../widgets/custom_widgets/default_button.dart';
 
 class SignUpForm extends StatelessWidget {
   SignUpForm({super.key});
-  final controller = Get.find<AccountApi>();
+  final controller = Get.find<AccountController>();
   final registerController = Get.find<RegisterController>();
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quanlyquantrasua/configs/colors.dart';
+import 'package:quanlyquantrasua/configs/font.dart';
 
 import '../../configs/mediaquery.dart';
 
@@ -32,12 +35,8 @@ class BirthdayDatePickerWidgetState extends State<BirthdayDatePickerWidget> {
           child: Padding(
             padding: EdgeInsets.only(top: mediaWidth(context, 30)),
             child: Container(
-              height: screenRotate(context)
-                  ? mediaHeight(context, 18)
-                  : mediaHeight(context, 9),
-              padding: EdgeInsets.only(
-                  left: mediaWidth(context, 16),
-                  right: mediaWidth(context, 16)),
+              height: 50.h,
+              padding: EdgeInsets.symmetric(horizontal: 5.w),
               child: ElevatedButton(
                 onPressed: () {
                   _selectDate(context);
@@ -45,9 +44,9 @@ class BirthdayDatePickerWidgetState extends State<BirthdayDatePickerWidget> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(50),
                   ),
                 ),
                 child: Row(
@@ -55,10 +54,15 @@ class BirthdayDatePickerWidgetState extends State<BirthdayDatePickerWidget> {
                   children: [
                     Text(
                       "${_selectedDate?.day ?? "Ngày"}/${_selectedDate?.month ?? "Tháng"}/${_selectedDate?.year ?? "Năm"}",
-                      style: const TextStyle(fontSize: 16),
+                      style: CustomFonts.nunitoFont(
+                          fontSize: 14.r, color: AppColors.white100),
                     ),
                     const Spacer(),
-                    const Icon(Icons.calendar_today),
+                    Icon(
+                      Icons.calendar_month_outlined,
+                      size: 30.r,
+                      color: AppColors.white100,
+                    ),
                   ],
                 ),
               ),

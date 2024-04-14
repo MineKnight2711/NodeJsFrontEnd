@@ -1,12 +1,10 @@
 // ignore_for_file: prefer_final_fields
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quanlyquantrasua/api/account/account_api.dart';
+import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/cart_controller.dart';
-import 'package:quanlyquantrasua/model/cart_model.dart';
-import 'package:quanlyquantrasua/model/dish_model.dart';
+import 'package:quanlyquantrasua/model/drink_model.dart';
 import 'package:quanlyquantrasua/model/size_model.dart';
 import 'package:quanlyquantrasua/model/topping_model.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/default_button.dart';
@@ -18,8 +16,8 @@ import '../components/size_choices.dart';
 import '../components/topping_choices.dart';
 
 class OrderDetailsBottomSheet extends StatefulWidget {
-  final DishModel dish;
-  const OrderDetailsBottomSheet({required this.dish, Key? key})
+  final DrinkModel drink;
+  const OrderDetailsBottomSheet({required this.drink, Key? key})
       : super(key: key);
   @override
   OrderDetailsBottomSheetState createState() => OrderDetailsBottomSheetState();
@@ -27,7 +25,7 @@ class OrderDetailsBottomSheet extends StatefulWidget {
 
 class OrderDetailsBottomSheetState extends State<OrderDetailsBottomSheet> {
   final cartControler = Get.find<CartController>();
-  final accountController = Get.find<AccountApi>();
+  final accountController = Get.find<AccountController>();
   SizeModel? selectedSize;
   int numOfItem = 0;
   List<ToppingModel>? listChosenTopping;
@@ -47,7 +45,7 @@ class OrderDetailsBottomSheetState extends State<OrderDetailsBottomSheet> {
                   padding: EdgeInsets.only(top: size.aspectRatio * 20),
                   child: Center(
                     child: Text(
-                      "${widget.dish.dishName}",
+                      widget.drink.drinkName,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
@@ -83,7 +81,7 @@ class OrderDetailsBottomSheetState extends State<OrderDetailsBottomSheet> {
                   child: Column(
                     children: [
                       SizedBox(
-                        child: Image.network("${widget.dish.image}"),
+                        child: Image.network(widget.drink.imageUrl),
                       ),
                       const Divider(
                         thickness: 3,
@@ -94,28 +92,35 @@ class OrderDetailsBottomSheetState extends State<OrderDetailsBottomSheet> {
                         height: size.height / 14,
                         width: size.width,
                         child: StyledGradienButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (selectedSize == null) {
                               CustomErrorMessage.showMessage(
                                   'Bạn chưa chọn kích cỡ!');
                               return;
                             }
-                            if (accountController.accountRespone.value ==
-                                null) {
+                            if (accountController.userSession.value == null) {
                               CustomErrorMessage.showMessage(
                                   'Vui lòng đăng nhập để đặt hàng!');
                               return;
                             }
                             showLoadingAnimation(context);
-                            cartControler.addToCart(CartItem(
-                                dish: widget.dish,
-                                quantity: numOfItem,
-                                size: selectedSize!,
-                                toppings: listChosenTopping ?? []));
-                            Future.delayed(const Duration(seconds: 1), () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            });
+                            final result = await cartControler.addToCart(
+                                accountController.userSession.value!.id,
+                                widget.drink.id,
+                                selectedSize!.id);
+                            if (result.success) {
+                              CustomToastMessage.showMessage(
+                                  "Đã thêm vào giỏ hàng");
+                              Future.delayed(const Duration(seconds: 1), () {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              });
+                            } else {
+                              CustomToastMessage.showMessage(result.data);
+                              Future.delayed(const Duration(seconds: 1), () {
+                                Navigator.pop(context);
+                              });
+                            }
                           },
                           buttonText: 'Thêm vào giỏ',
                           buttonIconAssets: 'assets/images/cart_add.png',
@@ -138,10 +143,9 @@ class OrderDetailsBottomSheetState extends State<OrderDetailsBottomSheet> {
                               ],
                             ),
                             SizeChoiceWidget(
-                              onSizeSelected: (value) {
-                                setState(() {
-                                  selectedSize = value;
-                                });
+                              onSelectedSize: (size) {
+                                selectedSize = size;
+                                print(selectedSize?.sizeName);
                               },
                             ),
                             const SizedBox(
@@ -165,6 +169,7 @@ class OrderDetailsBottomSheetState extends State<OrderDetailsBottomSheet> {
                         ),
                       ),
                       ToppingChoiceWidget(
+                        listTopping: widget.drink.toppings,
                         onToppingsSelected: (selectedToppings) {
                           listChosenTopping = selectedToppings;
                         },

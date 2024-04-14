@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quanlyquantrasua/api/account/account_api.dart';
 import 'package:quanlyquantrasua/configs/mediaquery.dart';
+import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/profile_controller.dart';
 import 'package:quanlyquantrasua/model/account_response.dart';
 import 'package:quanlyquantrasua/model/account_update_model.dart';
+import 'package:quanlyquantrasua/model/user_model.dart';
 import 'package:quanlyquantrasua/screens/home/home_screens.dart';
-import 'package:quanlyquantrasua/test/select_image_constant/image_select.dart';
-import 'package:quanlyquantrasua/utils/save_image.dart';
+import 'package:quanlyquantrasua/utils/select_image_constant/image_select.dart';
+
 import 'package:quanlyquantrasua/widgets/custom_widgets/custom_appbar.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/custom_input_textformfield.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/datetime_picker.dart';
@@ -18,10 +20,10 @@ import 'package:quanlyquantrasua/widgets/custom_widgets/showLoading.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/transition.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  final AccountResponse account;
-  EditProfileScreen({super.key, required this.account});
+  final UserModel user;
+  EditProfileScreen({super.key, required this.user});
   final profileController = Get.find<ProfileController>();
-  final accountController = Get.find<AccountApi>();
+  final accountController = Get.find<AccountController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,19 +44,19 @@ class EditProfileScreen extends StatelessWidget {
             onImageSelected: (value) {
               profileController.image = value;
             },
-            currentImageUrl: account.imageUrl,
+            currentImageUrl: user.imageUrl,
           ),
           SizedBox(
             height: mediaHeight(context, 23),
           ),
-          BirthdayDatePickerWidget(
-            initialDate: account.birthday != null
-                ? DateTime.parse(account.birthday!)
-                : DateTime.now(),
-            onChanged: (value) {
-              profileController.date = value;
-            },
-          ),
+          // BirthdayDatePickerWidget(
+          //   initialDate: user.birthday != null
+          //       ? DateTime.parse(account.birthday!)
+          //       : DateTime.now(),
+          //   onChanged: (value) {
+          //     profileController.date = value;
+          //   },
+          // ),
           SizedBox(
             height: mediaHeight(context, 50),
           ),
@@ -102,32 +104,32 @@ class EditProfileScreen extends StatelessWidget {
                     profileController.isValidFullname.value,
                 text: 'Lưu',
                 press: () async {
-                  AccountUpdate accountUpdate = AccountUpdate();
-                  accountUpdate.accountId =
-                      accountController.accountRespone.value?.accountId;
-                  accountUpdate.fullName =
-                      profileController.fullnameController.text;
-                  accountUpdate.birthday = profileController.date ??
-                      DateTime.parse(
-                          accountController.accountRespone.value?.birthday ??
-                              '');
-                  accountUpdate.phoneNumber =
-                      profileController.phonenumberController.text;
-                  accountUpdate.address =
-                      profileController.addressController.text;
-                  if (profileController.image != null) {
-                    accountUpdate.imageUrl = await saveImage(
-                        profileController.image,
-                        "${accountController.accountRespone.value?.email}_${accountController.accountRespone.value?.phoneNumber}");
-                  } else {
-                    accountUpdate.imageUrl =
-                        accountController.accountRespone.value?.imageUrl;
-                  }
-                  showLoadingAnimation(context);
-                  await accountController.updateAccount(accountUpdate).then(
-                      (value) => Future.delayed(const Duration(seconds: 1), () {
-                            slideinTransitionNoBack(context, HomeScreenView());
-                          }));
+                  // AccountUpdate accountUpdate = AccountUpdate();
+                  // accountUpdate.accountId =
+                  //     accountController.accountRespone.value?.accountId;
+                  // accountUpdate.fullName =
+                  //     profileController.fullnameController.text;
+                  // accountUpdate.birthday = profileController.date ??
+                  //     DateTime.parse(
+                  //         accountController.accountRespone.value?.birthday ??
+                  //             '');
+                  // accountUpdate.phoneNumber =
+                  //     profileController.phonenumberController.text;
+                  // accountUpdate.address =
+                  //     profileController.addressController.text;
+                  // if (profileController.image != null) {
+                  //   // accountUpdate.imageUrl = await saveImage(
+                  //   //     profileController.image,
+                  //   //     "${accountController.accountRespone.value?.email}_${accountController.accountRespone.value?.phoneNumber}");
+                  // } else {
+                  //   accountUpdate.imageUrl =
+                  //       accountController.accountRespone.value?.imageUrl;
+                  // }
+                  // showLoadingAnimation(context);
+                  // await accountController.updateAccount(accountUpdate).then(
+                  //     (value) => Future.delayed(const Duration(seconds: 1), () {
+                  //           slideinTransitionNoBack(context, HomeScreenView());
+                  //         }));
                 },
               ),
             ),

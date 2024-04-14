@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:quanlyquantrasua/api/account/account_api.dart';
+import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/cart_controller.dart';
 import 'package:quanlyquantrasua/controller/change_password_controller.dart';
+import 'package:quanlyquantrasua/controller/auth_controller.dart';
 import 'package:quanlyquantrasua/controller/profile_controller.dart';
 import 'package:quanlyquantrasua/screens/home/home_screens.dart';
 import 'package:quanlyquantrasua/screens/profile/profile_screen.dart';
@@ -18,7 +19,7 @@ import 'draw_header_bar.dart';
 // ignore: must_be_immutable
 class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
-  final controller = Get.find<AccountApi>();
+  final controller = Get.find<AccountController>();
   final cartController = Get.find<CartController>();
   CustomHomeAppBar({Key? key, required this.scaffoldKey}) : super(key: key);
 
@@ -47,7 +48,9 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               alignment: Alignment.center,
               child: GestureDetector(
                 onTap: () {
-                  slideinTransition(context, const CartScreen());
+                  controller.fetchCurrent();
+                  cartController.getByUserId();
+                  slideinTransition(context, CartScreen());
                 },
                 child: const Icon(
                   Icons.shopping_cart_outlined,
@@ -64,7 +67,7 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 backgroundColor: Colors.red,
                 child: Obx(
                   () => Text(
-                    '${cartController.cartItem.length}',
+                    '${cartController.listCart.length}',
                     style: const TextStyle(fontSize: 10),
                   ),
                 ),
@@ -78,8 +81,7 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         SizedBox(
           width: 45,
           child: Obx(() {
-            final userInfo = controller.accountRespone.value;
-            if (userInfo == null) {
+            if (controller.userSession.value == null) {
               return Container(
                 width: 45,
                 margin: const EdgeInsets.symmetric(vertical: 5),
@@ -95,21 +97,21 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 child: GestureDetector(
                   onTap: () {
+                    Get.put(AuthController());
                     slideinTransition(context, const SignInScreen());
                   },
                 ),
               );
             } else {
-              String? imageUrl = controller.accountRespone.value?.imageUrl;
               return Container(
                 width: 45,
                 margin: const EdgeInsets.symmetric(vertical: 5),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
-                    image: imageUrl != null
+                    image: controller.userSession.value?.imageUrl != null
                         ? Image.network(
-                            imageUrl,
+                            "${controller.userSession.value?.imageUrl}",
                           ).image
                         : Image.asset(
                             'assets/images/profile.png',
@@ -146,16 +148,16 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         padding: EdgeInsets.zero,
         children: [
           Obx(() {
-            if (controller.accountRespone.value != null) {
-              final accounts = controller.accountRespone.value!;
-              if (accounts.imageUrl != null) {
+            if (controller.userSession.value != null) {
+              final accounts = controller.userSession.value!;
+              if (accounts.imageUrl.isNotEmpty) {
                 avt = accounts.imageUrl;
               } else {
                 avt = 'assets/images/avt.png';
               }
               return MyDrawerHeader(
-                fullName: '${accounts.fullName}',
-                email: '${accounts.email}',
+                fullName: accounts.username,
+                email: accounts.email,
                 avatarUrl: '$avt',
               );
             }
@@ -164,14 +166,14 @@ class CustomHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ListTile(
             title: const Text('Cập nhật thông tin'),
             onTap: () {
-              if (controller.accountRespone.value == null) {
+              if (controller.userSession.value == null) {
                 CustomErrorMessage.showMessage(
                     'Có lỗi xảy ra!\nVui lòng đăng nhập lại để thực hiện thao tác này! ');
                 return;
               }
-              Get.put(ProfileController(controller.accountRespone.value!));
+              Get.put(ProfileController(controller.userSession.value!));
               slideinTransition(context,
-                  EditProfileScreen(account: controller.accountRespone.value!));
+                  EditProfileScreen(user: controller.userSession.value!));
             },
           ),
           ListTile(

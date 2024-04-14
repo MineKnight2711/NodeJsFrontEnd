@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quanlyquantrasua/api/account/account_api.dart';
+import 'package:quanlyquantrasua/controller/account_controller.dart';
 
 class ResetPasswordPopup extends StatefulWidget {
   const ResetPasswordPopup({super.key});
@@ -11,7 +12,7 @@ class ResetPasswordPopup extends StatefulWidget {
 
 class ResetPasswordPopupState extends State<ResetPasswordPopup> {
   TextEditingController emailController = TextEditingController();
-  final accountController = Get.find<AccountApi>();
+  final accountController = Get.find<AccountController>();
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -24,7 +25,7 @@ class ResetPasswordPopupState extends State<ResetPasswordPopup> {
         ElevatedButton(
           child: const Text('Send'),
           onPressed: () {
-            accountController.sendOtpToEmail(emailController.text);
+            // accountController.sendOtpToEmail(emailController.text);
           },
         ),
         ElevatedButton(

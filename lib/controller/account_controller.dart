@@ -1,54 +1,39 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:quanlyquantrasua/model/account_response.dart';
+import 'package:get/get.dart';
+import 'package:quanlyquantrasua/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-AccountResponse? currentLogin;
-
-class AccountController {
-  Future<String?> uploadImageToFirebaseStorage(
-      String? userInfor, File? image) async {
-    if (image != null) {
-      final fileName = 'user_$userInfor.jpg';
-      final Reference storageReference =
-          FirebaseStorage.instance.ref().child('userimage/$fileName');
-      final UploadTask uploadTask = storageReference.putFile(image);
-      final TaskSnapshot downloadUrl = (await uploadTask);
-      final String url = await downloadUrl.ref.getDownloadURL();
-      return url;
-    }
-    return '';
+class AccountController extends GetxController {
+  Rx<UserModel?> userSession = Rx<UserModel?>(null);
+  @override
+  void onInit() {
+    super.onInit();
+    fetchCurrent();
   }
 
-  Future<void> storedUserToSharedRefererces(
-      AccountResponse accountResponse) async {
-    final prefs = await SharedPreferences.getInstance();
-    final accountJsonEncode = jsonEncode(accountResponse);
-    await prefs.setString('currrent_account', accountJsonEncode);
+  Future fetchCurrent() async {
+    userSession.value = await getUserFromSharedPreferences();
   }
 
-  Future<AccountResponse?> loadUserInfo() async {
+  Future<void> storedUserToSharedRefererces(UserModel? user) async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString('currrent_account') ?? '';
-    if (jsonString.isNotEmpty) {
-      return AccountResponse.fromJson(jsonDecode(jsonString));
-    }
-    return null;
+    final accountJsonEncode = jsonEncode(user?.toJson());
+    await prefs.setString('current_user', accountJsonEncode);
   }
 
-  Future<AccountResponse?> getUserFromSharedPreferences() async {
+  Future<UserModel?> getUserFromSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString('currrent_account') ?? '';
-    if (jsonString.isNotEmpty) {
-      return AccountResponse.fromJson(jsonDecode(jsonString));
+    final currentUser = prefs.getString('current_user');
+    if (currentUser != null) {
+      final userJson = jsonDecode(currentUser);
+      return UserModel.fromJson(userJson);
     }
     return null;
   }
 
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.remove('currrent_account');
+    prefs.remove('current_user');
+    userSession.value = null;
   }
 }
