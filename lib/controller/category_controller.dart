@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:quanlyquantrasua/api/category/api_category.dart';
-
 import '../model/category_model.dart';
 
 class CategoryController extends GetxController {

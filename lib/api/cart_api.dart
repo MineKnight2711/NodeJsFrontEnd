@@ -45,11 +45,20 @@ class CartApi {
     throw Exception("Có lỗi xảy ra");
   }
 
-  Future<ResponseModel> updateCart(String cartId, int quantity) async {
+  Future<ResponseModel> updateCart(
+      String cartId, int quantity, List<String> toppings, String size) async {
+    final body = {
+      "quantity": quantity,
+      "toppings": toppings,
+      "size": size,
+    };
+
     final response = await http.put(
       Uri.parse("${ApiUrl.apiCart}/update-cart-item/$cartId"),
-      body: {"quantity": quantity},
+      body: jsonEncode(body),
+      headers: {"Content-Type": "application/json"},
     );
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return ResponseModel.fromJson(data);
@@ -64,5 +73,27 @@ class CartApi {
       return ResponseModel.fromJson(data);
     }
     throw Exception("Có lỗi xảy ra");
+  }
+
+  Future<ResponseModel> deleteMultipleCartItems(List<String> ids) async {
+    try {
+      const url = '${ApiUrl.apiCart}/delete-multiple-item';
+
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({'ids': ids}),
+      );
+
+      // Check if the request was successful (status code 200-299)
+      if (response.statusCode == 200) {
+        return ResponseModel.fromJson(jsonDecode(response.body));
+      }
+      throw Exception("Có lỗi xảy ra");
+    } catch (error) {
+      rethrow;
+    }
   }
 }

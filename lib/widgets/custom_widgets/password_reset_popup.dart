@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quanlyquantrasua/api/account/account_api.dart';
 import 'package:quanlyquantrasua/controller/account_controller.dart';
 
 class ResetPasswordPopup extends StatefulWidget {

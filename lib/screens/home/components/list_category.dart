@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:quanlyquantrasua/configs/colors.dart';
 import 'package:quanlyquantrasua/configs/font.dart';
 import 'package:quanlyquantrasua/controller/category_controller.dart';
+import 'package:quanlyquantrasua/screens/drink_by_category/list_dish_by_category.dart';
 
 class MenuCategoryList extends StatelessWidget {
   MenuCategoryList({Key? key}) : super(key: key);
@@ -31,6 +31,7 @@ class MenuCategoryList extends StatelessWidget {
                     return InkWell(
                       borderRadius: BorderRadius.circular(50),
                       onTap: () {
+                        Get.to(DishByCategory(category: item));
                         // slideinTransition(
                         //     context, DishByCategory(category: item));
                       },
