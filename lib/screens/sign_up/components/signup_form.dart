@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quanlyquantrasua/api/account/account_api.dart';
 import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/register_controller.dart';
 import 'package:quanlyquantrasua/screens/sign_up/sign_up_complete_screen.dart';

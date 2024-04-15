@@ -46,7 +46,7 @@ class SizeChoiceWidget extends StatelessWidget {
                                       : Colors.grey[300],
                               borderRadius: BorderRadius.circular(8.0),
                             ),
-                            child: Center(child: Text(item.sizeName!)),
+                            child: Center(child: Text(item.sizeName)),
                           ),
                         ));
                   },
@@ -64,35 +64,42 @@ class SizeChoiceWidget extends StatelessWidget {
 }
 
 class SizeRadioChosen extends StatelessWidget {
+  final SizeModel currentSize;
+  final selectedSize = Rxn<SizeModel>();
   final Function(SizeModel) onSelectedSize;
-  final SizeModel selected;
-  final _drinkController = Get.find<DrinkController>();
+  final drinkController = Get.find<DrinkController>();
 
   SizeRadioChosen(
-      {super.key, required this.onSelectedSize, required this.selected});
+      {super.key, required this.onSelectedSize, required this.currentSize});
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (_drinkController.listSize.isNotEmpty) {
+      if (drinkController.listSize.isNotEmpty) {
+        selectedSize.value = drinkController.listSize.firstWhere(
+          (e) => e.id == currentSize.id,
+        );
         return SizedBox(
           height: MediaQuery.of(context).size.height /
-              (_drinkController.listSize.length * 1.6),
+              (drinkController.listSize.length * 1.6),
           width: double.infinity,
           child: ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: _drinkController.listSize.length,
+            itemCount: drinkController.listSize.length,
             itemBuilder: (context, index) {
-              final item = _drinkController.listSize[index];
+              final item = drinkController.listSize[index];
               return Column(
                 children: [
-                  RadioListTile(
-                    title: Text(item.sizeName),
-                    value: item,
-                    groupValue: selected,
-                    onChanged: (value) {
-                      onSelectedSize(value ?? selected);
-                    },
+                  Obx(
+                    () => RadioListTile(
+                      title: Text(item.sizeName),
+                      value: item,
+                      groupValue: selectedSize.value,
+                      onChanged: (value) {
+                        selectedSize.value = value;
+                        onSelectedSize(value!);
+                      },
+                    ),
                   ),
                   const Divider(
                     thickness: 2,
@@ -111,7 +118,7 @@ class SizeRadioChosen extends StatelessWidget {
     });
   }
 
-  SizeModel getSelected() {
-    return selected;
-  }
+  // SizeModel getSelectedSize() {
+  //   return currentSize;
+  // }
 }

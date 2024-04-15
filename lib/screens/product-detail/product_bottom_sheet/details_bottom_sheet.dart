@@ -107,7 +107,8 @@ class OrderDetailsBottomSheetState extends State<OrderDetailsBottomSheet> {
                             final result = await cartControler.addToCart(
                                 accountController.userSession.value!.id,
                                 widget.drink.id,
-                                selectedSize!.id);
+                                selectedSize!.id,
+                                listChosenTopping ?? []);
                             if (result.success) {
                               CustomToastMessage.showMessage(
                                   "Đã thêm vào giỏ hàng");

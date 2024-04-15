@@ -9,7 +9,7 @@ import 'package:quanlyquantrasua/configs/font.dart';
 import 'package:quanlyquantrasua/controller/drink_controller.dart';
 import '../../../utils/format_currency.dart';
 import '../../product-detail/product_bottom_sheet/details_bottom_sheet.dart';
-import '../data/list_dish.dart';
+import '../banner/list_dish.dart';
 import 'list_category.dart';
 
 class GroceryContainer extends StatelessWidget {

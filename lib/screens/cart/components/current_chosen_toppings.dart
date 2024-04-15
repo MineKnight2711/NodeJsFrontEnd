@@ -1,93 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:quanlyquantrasua/utils/data_convert.dart';
 
-import '../../../api/topping/api_topping.dart';
 import '../../../model/topping_model.dart';
 
-class CurrentToppingChoiceWidget extends StatefulWidget {
+class CurrentToppingChoiceWidget extends StatelessWidget {
+  final RxList<ToppingModel> chosenToppings = <ToppingModel>[].obs;
   final Function(List<ToppingModel>) onToppingsSelected;
-  final List<ToppingModel>? currentToppings;
+  final List<ToppingModel> currentToppings;
+  final List<ToppingModel> drinkTopping;
 
-  const CurrentToppingChoiceWidget({
-    Key? key,
+  CurrentToppingChoiceWidget({
+    super.key,
     required this.onToppingsSelected,
-    this.currentToppings,
-  }) : super(key: key);
-
-  @override
-  CurrentToppingChoiceWidgetState createState() =>
-      CurrentToppingChoiceWidgetState();
-}
-
-class CurrentToppingChoiceWidgetState
-    extends State<CurrentToppingChoiceWidget> {
-  List<ToppingModel> chosenToppings = [];
-  final toppingController = Get.find<ToppingApi>();
-
-  @override
-  void initState() {
-    super.initState();
-    chosenToppings = widget.currentToppings ?? [];
-  }
+    required this.currentToppings,
+    required this.drinkTopping,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    chosenToppings.value = currentToppings;
     return SizedBox(
-      width: size.width,
-      height: size.height * 0.5,
+      height: 200.h,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 8.0),
-          if (toppingController.listTopping != null) ...[
+          if (drinkTopping.isNotEmpty)
             Expanded(
               child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: toppingController.listTopping!.length,
+                itemCount: drinkTopping.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final topping = toppingController.listTopping![index];
-                  return CheckboxListTile(
-                    value: chosenToppings.contains(topping),
-                    onChanged: (value) {
-                      setState(() {
+                  final topping = drinkTopping[index];
+                  return Obx(
+                    () => CheckboxListTile(
+                      value: chosenToppings
+                          .any((element) => element.id == topping.id),
+                      onChanged: (value) {
                         if (value!) {
                           chosenToppings.add(topping);
                         } else {
-                          chosenToppings.remove(topping);
+                          chosenToppings.removeWhere(
+                              (element) => element.id == topping.id);
                         }
-                      });
-                      widget.onToppingsSelected(chosenToppings);
-                    },
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${topping.toppingName}",
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Image.network(
-                              "${topping.imageUrl}",
-                              width: 30,
+                        onToppingsSelected(chosenToppings);
+                      },
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${topping.toppingName}",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '\$${topping.price?.toStringAsFixed(2)}',
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              Image.network(
+                                "${topping.imageUrl}",
+                                width: 30,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                DataConvert.formatCurrency(topping.price ?? 0),
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
               ),
             ),
-          ],
         ],
       ),
     );

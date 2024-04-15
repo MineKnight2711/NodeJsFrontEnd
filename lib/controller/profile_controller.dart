@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quanlyquantrasua/model/account_response.dart';
 import 'package:quanlyquantrasua/model/user_model.dart';
 
 class ProfileController extends GetxController {

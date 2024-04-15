@@ -1,23 +1,13 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quanlyquantrasua/api/account/account_api.dart';
 import 'package:quanlyquantrasua/configs/mediaquery.dart';
 import 'package:quanlyquantrasua/controller/account_controller.dart';
 import 'package:quanlyquantrasua/controller/profile_controller.dart';
-import 'package:quanlyquantrasua/model/account_response.dart';
-import 'package:quanlyquantrasua/model/account_update_model.dart';
 import 'package:quanlyquantrasua/model/user_model.dart';
-import 'package:quanlyquantrasua/screens/home/home_screens.dart';
 import 'package:quanlyquantrasua/utils/select_image_constant/image_select.dart';
-
 import 'package:quanlyquantrasua/widgets/custom_widgets/custom_appbar.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/custom_input_textformfield.dart';
-import 'package:quanlyquantrasua/widgets/custom_widgets/datetime_picker.dart';
 import 'package:quanlyquantrasua/widgets/custom_widgets/default_button.dart';
-import 'package:quanlyquantrasua/widgets/custom_widgets/showLoading.dart';
-import 'package:quanlyquantrasua/widgets/custom_widgets/transition.dart';
 
 class EditProfileScreen extends StatelessWidget {
   final UserModel user;

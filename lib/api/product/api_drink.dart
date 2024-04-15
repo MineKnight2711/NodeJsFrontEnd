@@ -13,4 +13,35 @@ class DrinkApi {
     }
     throw Exception("Có lỗi xảy ra");
   }
+
+  Future<ResponseModel> getByDrinkId(String drinkId) async {
+    final url = Uri.parse("${ApiUrl.apiGetAllProduct}/$drinkId");
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return ResponseModel.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes)));
+    }
+    throw Exception("Có lỗi xảy ra");
+  }
+
+  Future<ResponseModel> getByCategoryId(String id) async {
+    final url = Uri.parse("${ApiUrl.apiGetAllProduct}/get-by-category/$id");
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return ResponseModel.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes)));
+    }
+    throw Exception("Có lỗi xảy ra");
+  }
+
+  Future<ResponseModel> search(String q) async {
+    final response = await http.get(
+      Uri.parse("${ApiUrl.apiGetAllProduct}/search?drinkName=$q"),
+    );
+    if (response.statusCode == 200) {
+      return ResponseModel.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes)));
+    }
+    throw Exception("Có lỗi xảy ra");
+  }
 }

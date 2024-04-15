@@ -14,6 +14,7 @@ class ApiUrl {
   static const apiGetUserInfo = '${baseUrl}auth/me';
   static const apiForgotPassword = '${baseUrl}auth/forgotPassword';
   static const apiCart = '${baseUrl}cart';
+  static const apiOrder = '${baseUrl}order';
   static const apiGetAllToppings = '${baseUrl}topping';
   static const apiCreateOrder = '${baseUrl}orders';
   static const apiUpdateAccount = '${baseUrl}accounts/update';
